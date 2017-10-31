@@ -1,8 +1,19 @@
 Logitech LCD Plugin
 ===================
-OBS plugin that adds Logitech Colour and Monochrome LCD support. Plan is to add FPS, bitrate and dropped frames when possable with OBS API/I manage to find another way  
-Compiled using VS 2010  
-  
+OBS plugin that adds Logitech Colour and Monochrome LCD support.
+
+Plan is to upgrade to OBS studio api, add preview to color LCD.
+
+Compiled using VS 2015
+
+Build
+=====
+- Clone this git repo and put it inside `obs-studio\plugins\`
+- Add this line`add_subdirectory(LogiLCD)` to `obs-studio\plugins\CMakeLists.txt`
+- In Cmake, re Configure and Generate
+
+Note: for now you still have to copy `LogitechLcd.dll` manually once
+
 INSTALLATION
 ============
 Put LogiLCD.dll into ../Program Files/OBS/plugins folder  
