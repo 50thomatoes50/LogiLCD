@@ -18,24 +18,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 ********************************************************************************/
 
 #include "LogiLCD.h"
-#include "LogitechLcd.h"
+#include "Include/LogitechLcd.h"
 #include "mono_background.h"
 #include <string>
 #include <sstream>
 #include <iomanip>
-
+#include <Windows.h>
 #include <fstream>
 
-using namespace std;
+OBS_DECLARE_MODULE()
+OBS_MODULE_USE_DEFAULT_LOCALE("LogiLCD", "en-US")
 
-ofstream file;
+std::ofstream file;
 
 ending close;
 HANDLE LcdThread;
-//localisation
-LocaleStringLookup *pluginLocale = NULL;
 
-bool LoadPlugin()
+bool obs_module_load()
 {
 	if(!LogiLcdInit(L"OBS", LOGI_LCD_TYPE_MONO | LOGI_LCD_TYPE_COLOR))
 	{
@@ -58,46 +57,31 @@ bool LoadPlugin()
 		LcdThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Colour, NULL, 0, 0);
 	}
 
-	//localisation
-	 pluginLocale = new LocaleStringLookup;
-
-    if(!pluginLocale->LoadStringFile(TEXT("locale/en.txt")))
-        AppWarning(TEXT("Could not open locale string file '%s'"), TEXT("plugins/PSVPlugin/locale/en.txt"));
-
-    if(scmpi(API->GetLanguage(), TEXT("en")) != 0)
-    {
-        String pluginStringFile;
-        pluginStringFile << TEXT("locale/") << API->GetLanguage() << TEXT(".txt");
-        if(!pluginLocale->LoadStringFile(pluginStringFile))
-            AppWarning(TEXT("Could not open locale string file '%s'"), pluginStringFile.Array());
-    }
-
 	return true;
 }
 
-void UnloadPlugin()
+void obs_module_unload()
 {
 	//stop Logitech LCD thread
 	close.now();
 	WaitForSingleObject(LcdThread, INFINITE);
-	//localisation
-	delete pluginLocale;
+
 	return;
 }
 
-CTSTR GetPluginName()
+const char *obs_module_name()
 {
-	return TEXT("Logitech LCD");
+	return "Logitech LCD";
 }
 
-CTSTR GetPluginDescription()
+const char *obs_module_description()
 {
-	return TEXT("Adds Logitech LCD Monochrome and Colour support");
+	return "Adds Logitech LCD Monochrome and Colour support";
 }
 
 DWORD WINAPI Mono(LPVOID lpParam)
 {
-	wstring scene;
+	std::wstring scene;
 	bool miclast = false;
 	bool desklast = false;
 	bool livelast = false;
@@ -106,20 +90,20 @@ DWORD WINAPI Mono(LPVOID lpParam)
 	//fps and bitrate
 	int fps;
 	float bitrate;
-	wstringstream fpsbyte;
+	std::wstringstream fpsbyte;
 
 	bool altdisplay = false;
 	//dropped frames
 	int dropped;
 	int total;
 	double percent;
-	wstringstream frames;
+	std::wstringstream frames;
 	//stream time
 	int uptime;
 	int sec;
 	int min;
 	int hour;
-	wstringstream stime;
+	std::wstringstream stime;
 	
 	while(!close.state()) //Text line length  is 26 characters
 	{
@@ -336,7 +320,7 @@ DWORD WINAPI Colour(LPVOID lpParam)
 {
 	bool live = false;
 
-	wstring scene;
+	std::wstring scene;
 	bool leftlast = false;
 	bool rightlast = false;
 	bool uplast = false;
@@ -348,19 +332,19 @@ DWORD WINAPI Colour(LPVOID lpParam)
 	int fps;
 	float bitrate;
 	double fpspercent;
-	wstringstream sfps;
-	wstringstream sbyte;
+	std::wstringstream sfps;
+	std::wstringstream sbyte;
 	//dropped frames
 	int dropped;
 	int total;
 	double percent;
-	wstringstream frames;
+	std::wstringstream frames;
 	//stream time
 	int uptime;
 	int sec;
 	int min;
 	int hour;
-	wstringstream stime;
+	std::wstringstream stime;
 
 	LogiLcdColorSetTitle(L"OBS", 255, 255, 255);
 
@@ -574,7 +558,7 @@ DWORD WINAPI Dual(LPVOID lpParam)
 {
 	bool live = false;
 
-	wstring scene;
+	std::wstring scene;
 	//mono buttons
 	bool miclast = false;
 	bool desklast = false;
@@ -593,21 +577,21 @@ DWORD WINAPI Dual(LPVOID lpParam)
 	int fps;
 	float bitrate;
 	double fpspercent;
-	wstringstream fpsbyte;
-	wstringstream sfps;
-	wstringstream sbyte;
+	std::wstringstream fpsbyte;
+	std::wstringstream sfps;
+	std::wstringstream sbyte;
 	//dropped frames
 	int dropped;
 	int total;
 	double percent;
-	wstringstream frames;
+	std::wstringstream frames;
 	
 	//stream time
 	int uptime;
 	int sec;
 	int min;
 	int hour;
-	wstringstream stime;
+	std::wstringstream stime;
 
 	LogiLcdColorSetTitle(L"OBS", 255, 255, 255);
 
