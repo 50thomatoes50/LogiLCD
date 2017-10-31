@@ -1,5 +1,6 @@
 /********************************************************************************
 Copyright (C) 2014 William Pearson <adocilesloth@gmail.com>
+Copyright (C) 2017 Thomas Portassau <50thomatoes50>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
