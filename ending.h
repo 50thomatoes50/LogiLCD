@@ -1,7 +1,7 @@
 #ifndef ENDING_H
 #define ENDING_H
 
-#include "OBSApi.h"
+#include <Windows.h>
 
 class ending
 {
